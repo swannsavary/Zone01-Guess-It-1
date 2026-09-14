@@ -1,0 +1,3 @@
+lancement :
+
+./student/script.sh
