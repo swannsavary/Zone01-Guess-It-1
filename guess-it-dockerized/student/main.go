@@ -13,41 +13,31 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	writer := bufio.NewWriter(os.Stdout)
 	defer writer.Flush()
-	var allnb []int
 	for {
+		//si plus de donnees a lire alors break
 		line, err := reader.ReadString('\n')
 		if err != nil {
-			break // EOF, plus de données
+			break
 		}
-		line = strings.TrimSpace(line)
-		if line == "" {
-			continue
-		}
-
-		num, err := strconv.Atoi(line)
+		//prend chaque ligne, la convertit en int et l'ajoute a sorted
+		num, err := strconv.Atoi(strings.TrimSpace(line))
 		if err != nil {
 			continue
 		}
-		allnb = append(allnb, num)
-		min, max := calculerPlage(allnb)
+		tools.Insert(num)
+		min, max := calculerPlage()
 
 		fmt.Fprintf(writer, "%v %v\n", min, max)
-		writer.Flush() // important : flush à chaque tour, pas juste à la fin
+		writer.Flush()
 	}
 }
 
-func calculerPlage(allnb []int) (float64, float64) {
-	if len(allnb) < 5 {
-		moyenne := tools.Median(allnb)
-		return moyenne * 0.8, moyenne * 1.2
+func calculerPlage() (float64, float64) {
+	m := tools.Median()
+	if tools.Len() < 5 {
+		return m * 0.8, m * 1.2
 	}
-	dif := 0.40
-	plagenb := 30
-	fenetre := allnb
-	if len(allnb) > plagenb {
-		fenetre = allnb[len(allnb)-plagenb:]
-	}
-	moy := tools.Median(fenetre)
-	mad := tools.MAD(fenetre) * 1.4826
-	return moy - dif*mad, moy + dif*mad
+	dif := 1.25
+	d := tools.Mad(m) * 1.4826
+	return m - dif*d, m + dif*d
 }
