@@ -1,5 +1,7 @@
 lancement :
 
+cd guess-it-dockerized/
+
 docker compose up --build
 
 puis aller sur :
