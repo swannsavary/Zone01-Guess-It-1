@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 	"strings"
-	tools "student/mathtools"
+	tools "student/tools"
 )
 
 func main() {
